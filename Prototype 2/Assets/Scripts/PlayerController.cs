@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float speed = 21.0f, xRange = 21.0f;
+    [SerializeField]
+    private GameObject projectilePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +20,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
+        }
+
         horizontalInput = Input.GetAxis("Horizontal");
 
         if (horizontalInput == 0) return;
