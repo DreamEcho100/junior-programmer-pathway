@@ -4,30 +4,29 @@ using UnityEngine;
 
 public class DestroyOutOfBounds : MonoBehaviour
 {
+    public const string PLAYER_TAG = "Player";
+    public const string FOOD_TAG = "Food";
+    public const string ANIMAL_TAG = "Animal";
+
     [SerializeField]
-    private float topBound = 30, lowerBound = -10;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private float
+        topBound = 30,
+        lowerBound = -10,
+        leftBound = -24,
+        rightBound = 24;
 
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.z > topBound)
+        if (
+            transform.position.z > topBound ||
+            transform.position.x > rightBound ||
+            transform.position.x < leftBound ||
+            transform.position.z < lowerBound
+        )
         {
-            Destroy(gameObject);
-        } else if (transform.position.z < lowerBound)
-        {
-            Debug.Log("Game Over!");
+            if (gameObject.CompareTag(FOOD_TAG)) GameManager.instance.DecrementPlayerLivesByOne();
             Destroy(gameObject);
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(gameObject);
-        Destroy(other.gameObject);
     }
 }

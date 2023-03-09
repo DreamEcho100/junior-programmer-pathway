@@ -7,9 +7,19 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] animalPrefabs;
     [SerializeField]
-    private float spawnRangeX = 18, spawnRangeZ = 25, minSpawnTime = 0, maxSpawnTime = 3;
-
+    private float
+        spawnRangeXMin = -18f,
+        spawnRangeXMax = 18f,
+        spawnRangeY = 0f,
+        spawnRangeZMin = 25f,
+        spawnRangeZMax = 25f,
+        minSpawnTime = 2f,
+        maxSpawnTime = 6f;
+    [SerializeField]
+    private Vector3 spawnRotation = new Vector3(0f, 180f, 0f);
+    
     private int animalIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +42,11 @@ public class SpawnManager : MonoBehaviour
         animalIndex = Random.Range(0, animalPrefabs.Length);
         Instantiate(
             animalPrefabs[animalIndex],
-            new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0, spawnRangeZ),
-            animalPrefabs[animalIndex].transform.rotation
+            new Vector3(
+                Random.Range(spawnRangeXMin, spawnRangeXMax),
+                spawnRangeY,
+                Random.Range(spawnRangeZMin, spawnRangeZMax)),
+            Quaternion.Euler(spawnRotation)
         );
     }
 
