@@ -30,5 +30,7 @@ public class SpawnManager : MonoBehaviour
 	void SpawnObstacle()
 	{
 		Instantiate(obstaclePrefab, spawnPos, obstaclePrefab.transform.rotation);
+
+		if (GameManager.instance.isGameOver) CancelInvoke(nameof(SpawnObstacle));
 	}
 }

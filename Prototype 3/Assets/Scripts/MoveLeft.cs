@@ -6,6 +6,7 @@ public class MoveLeft : MonoBehaviour
 {
 
 	// private new Rigidbody rigidbody;
+	private const string PLAYER_TAG = "Player";
 
 	[SerializeField]
 	private float
@@ -17,11 +18,14 @@ public class MoveLeft : MonoBehaviour
 	void Start()
 	{
 		// rigidbody = transform.GetComponent<Rigidbody>();
+		// playerController = GameObject.Find(PLAYER_TAG).GetComponent<PlayerController>();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
+		if (GameManager.instance.isGameOver) return;
+
 		transform.Translate(Vector3.left * Time.deltaTime * speed);
 		// rigidbody.velocity = Vector3.left * speed;
 	}
