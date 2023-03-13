@@ -5,16 +5,10 @@ using UnityEngine;
 public class RotatePropeller : MonoBehaviour
 {
     [SerializeField]
-    private float rotationSpeed = 1000.0f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private float rotationSpeed = 3000f;
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         transform.Rotate(Vector3.forward * Time.deltaTime * rotationSpeed);
     }
