@@ -6,9 +6,11 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
 	private static bool _isGameOver = false;
+	private static float _volumeDownRate = 0.15f;
 
 	public static PlayerController playerController;
 	public bool isGameOver { get { return _isGameOver; } }
+	public float volumeDownRate { get { return _volumeDownRate; } }
 
 	private const string PLAYER_TAG = "Player";
 

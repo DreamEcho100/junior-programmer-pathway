@@ -6,13 +6,19 @@ public class PlayerController : MonoBehaviour
 {
 	private new Rigidbody rigidbody;
 	private Animator animator;
+	private AudioSource audioSource, mainCameraAudioSource;
 
-	private bool
-		isOnGround = true;
+	private bool isOnGround = true;
 	private const string
 		GROUND_TAG = "Ground",
 		OBSTACLE_TAG = "Obstacle";
 
+	[SerializeField]
+	private ParticleSystem
+		explosionParticle,
+		dirtParticle;
+	[SerializeField]
+	private AudioClip jumpSound, crashSound;
 	[SerializeField]
 	private float
 	JumpForce = 13f,
@@ -23,6 +29,9 @@ public class PlayerController : MonoBehaviour
 	{
 		rigidbody = GetComponent<Rigidbody>();
 		animator = GetComponent<Animator>();
+		audioSource = GetComponent<AudioSource>();
+
+		mainCameraAudioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
 
 		Physics.gravity *= GravityModifier;
 	}
@@ -30,10 +39,29 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !GameManager.instance.isGameOver)
+		if (GameManager.instance.isGameOver && mainCameraAudioSource.isPlaying)
 		{
-			rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+			float volumeDown = (Time.deltaTime * GameManager.instance.volumeDownRate);
+			if (mainCameraAudioSource.volume - volumeDown > 0)
+			{
+				mainCameraAudioSource.volume = mainCameraAudioSource.volume - volumeDown;
+			}
+			else
+			{
+				mainCameraAudioSource.Stop();
+			}
+			return;
+		}
+
+		if (
+			Input.GetKeyDown(KeyCode.Space) &&
+			isOnGround
+		)
+		{
 			isOnGround = false;
+			rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+			audioSource.PlayOneShot(jumpSound, 1.0f);
+			dirtParticle.Stop();
 			animator.SetTrigger("Jump_trig");
 		}
 	}
@@ -47,11 +75,18 @@ public class PlayerController : MonoBehaviour
 		{
 			case GROUND_TAG:
 				isOnGround = true;
+				if (!GameManager.instance.isGameOver) dirtParticle.Play();
 				break;
 			case OBSTACLE_TAG:
-				GameManager.instance.SetIsGameOverTrue();
 				animator.SetBool("Death_b", true);
 				animator.SetInteger("DeathType_int", 1);
+				dirtParticle.Stop();
+				if (!GameManager.instance.isGameOver)
+				{
+					explosionParticle.Play();
+					audioSource.PlayOneShot(crashSound, 1.0f);
+				}
+				GameManager.instance.SetIsGameOverTrue();
 				Debug.Log("Game Over!");
 				break;
 		}

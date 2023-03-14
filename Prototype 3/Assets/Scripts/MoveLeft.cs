@@ -10,7 +10,7 @@ public class MoveLeft : MonoBehaviour
 
 	[SerializeField]
 	private float
-		speed = 25,
+		speed = 35,
 		startDelay = 2,
 		repeatRate = 2;
 
