@@ -618,8 +618,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 25
-  startDelay: 2
-  repeatRate: 2
 --- !u!114 &835818923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400046, guid: 814f4326a50812947b2469896d89a215, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 400046, guid: 814f4326a50812947b2469896d89a215, type: 3}
       propertyPath: m_LocalPosition.y
@@ -793,7 +791,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f1643b8714de843ac2521a29fc9926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstaclePrefab: {fileID: 8300592548004116363, guid: 1c039c5a9ec3b7549baac510f31700d6, type: 3}
+  obstaclesPrefab:
+  - {fileID: 8300592548004116363, guid: 1c039c5a9ec3b7549baac510f31700d6, type: 3}
+  - {fileID: 8969383621659929092, guid: 510f318d8e84de44eb462490be204ec8, type: 3}
+  - {fileID: 3515635619950241259, guid: f2e879461d60eb44691c46a3d0a82d4b, type: 3}
+  - {fileID: 3854570730805209596, guid: b47316d799a8dd94a9901ed184ec1037, type: 3}
   spawnPos: {x: 20, y: 0, z: 0}
   startDelay: 2
   repeatRate: 2
@@ -829,6 +831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb02babee7c196d43800120edc33b080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  introductionSecs: 2
   explosionParticle: {fileID: 1948852545}
   dirtParticle: {fileID: 1272033876}
   jumpSound: {fileID: 8300000, guid: 113ee460fadc340e4957a7404a9fbb27, type: 3}
