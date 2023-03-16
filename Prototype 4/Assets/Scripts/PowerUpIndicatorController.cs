@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpIndicatorContoller : MonoBehaviour
+public class PowerUpIndicatorController : MonoBehaviour
 {
 	private GameObject player;
+
 
 	[SerializeField]
 	private Vector3 offset = new Vector3(0, -0.5f, 0);
@@ -20,7 +21,7 @@ public class PowerUpIndicatorContoller : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (!transform.gameObject.activeInHierarchy) return;
+		if (!transform.gameObject.activeInHierarchy || !player) return;
 
 		transform.position = player.transform.position + offset;
 		transform.Rotate(Vector3.up * Time.deltaTime * rotationSpeed);

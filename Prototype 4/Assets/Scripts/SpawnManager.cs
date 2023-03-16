@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+
+	private const string POWER_UP_TAG = "PowerUp";
+
 	private GameObject player;
 
 	[SerializeField]
-	private GameObject enemyPrefab;
+	private GameObject
+		enemyPrefab,
+		powerUpPrefab;
+
 	[SerializeField]
 	private float
 		spawnPosRangeX = 9,
@@ -19,13 +25,45 @@ public class SpawnManager : MonoBehaviour
 	void Start()
 	{
 		player = GameObject.Find("Player");
-		Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+		SpawnEnemyWave();
+		ReSpawnPowerUpsWave();
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
+		if (GameManager.instance.SpawnCountMonitor())
+		{
+			SpawnEnemyWave();
+			ReSpawnPowerUpsWave();
+		}
+	}
 
+	void SpawnEnemyWave()
+	{
+		if (!player) return;
+
+		for (int i = 0; i < GameManager.instance.enemiesToSpawnCounter; i++)
+		{
+			Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+			GameManager.instance.enemiesSpawnedCounter++;
+		}
+	}
+	void ReSpawnPowerUpsWave()
+	{
+		if (!player) return;
+
+		GameObject[] powerUps = GameObject.FindGameObjectsWithTag(POWER_UP_TAG);
+		foreach (GameObject powerUp in powerUps)
+		{
+			Destroy(powerUp);
+		}
+
+		PowerUpIndicatorController[] spawnPowerUps = FindObjectsOfType<PowerUpIndicatorController>();
+		for (int i = 0; i < GameManager.instance.powerUpsToSpawnCounter; i++)
+		{
+			Instantiate(powerUpPrefab, GenerateSpawnPosition(), powerUpPrefab.transform.rotation);
+			GameManager.instance.powerUpsSpawnedCounter++;
+		}
 	}
 
 	private Vector3 GenerateSpawnPosition()

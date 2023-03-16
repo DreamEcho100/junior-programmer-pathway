@@ -22,6 +22,12 @@ public class EnemyController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (transform.position.y < -10)
+		{
+			Destroy(gameObject);
+			GameManager.instance.enemiesSpawnedCounter--;
+		}
+		if (!player) return;
 		// If you are confused about normalize, all it does it "resize" your
 		// vector values (x,y,z) to be less than or equal to 1, while maintaining
 		// the proportion.

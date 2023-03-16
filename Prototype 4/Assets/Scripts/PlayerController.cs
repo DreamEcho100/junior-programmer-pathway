@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+	private int collidedEnemiesCounter = 0;
 	private GameObject focalPoint;
 
 	private new Rigidbody rigidbody;
@@ -34,6 +35,16 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate()
 	{
+		if (
+			GameManager.instance.enemiesSpawnedCounter > 3 &&
+			collidedEnemiesCounter == GameManager.instance.enemiesSpawnedCounter &&
+			!hasPowerUp
+		)
+		{
+			Debug.Log("Game Over!");
+			return;
+		}
+
 		verticalInput = Input.GetAxis("Vertical");
 
 		// FixedUpdate is framerate independent and is used for consistent
@@ -47,6 +58,15 @@ public class PlayerController : MonoBehaviour
 		rigidbody.AddForce(focalPoint.transform.forward * speed * verticalInput);
 	}
 
+	void Update()
+	{
+
+		if (transform.position.y < -10)
+		{
+			Destroy(gameObject);
+		}
+	}
+
 	void OnCollisionEnter(Collision other)
 	{
 
@@ -54,6 +74,7 @@ public class PlayerController : MonoBehaviour
 		{
 
 			case ENEMY_TAG:
+				collidedEnemiesCounter++;
 				if (!hasPowerUp) break;
 
 				Rigidbody enemyRigidbody = other.gameObject.GetComponent<Rigidbody>();
@@ -66,6 +87,17 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	void OnCollisionExit(Collision other)
+	{
+		switch (other.gameObject.tag)
+		{
+
+			case ENEMY_TAG:
+				collidedEnemiesCounter--;
+				break;
+		}
+	}
+
 	void OnTriggerEnter(Collider other)
 	{
 		switch (other.tag)
@@ -74,6 +106,7 @@ public class PlayerController : MonoBehaviour
 				hasPowerUp = true;
 				powerUpIndicator.SetActive(true);
 				Destroy(other.gameObject);
+				GameManager.instance.powerUpsSpawnedCounter--;
 				StartCoroutine(nameof(PowerUpCountdownRoutine));
 				break;
 		}
