@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+	private new Rigidbody rigidbody;
+
+	private float verticalInput, horizontalInput;
+
+	private const string ENEMY_TAG = "Enemy";
+	private const string POWER_UP_TAG = "PowerUp";
+
 	[SerializeField]
 	private float
 		speed = 10.0f,
 		zBound = 6.0f;
 
-	private float verticalInput, horizontalInput;
-	private new Rigidbody rigidbody;
 
 	// Start is called before the first frame update
 	void Start()
@@ -52,5 +58,25 @@ public class PlayerController : MonoBehaviour
 				transform.position.y,
 				zBound
 			);
+	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		switch (other.gameObject.tag)
+		{
+			case ENEMY_TAG:
+				Debug.Log("Player collided with an enemy!");
+				break;
+		}
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		switch (other.gameObject.tag)
+		{
+			case POWER_UP_TAG:
+				Destroy(other.gameObject);
+				break;
+		}
 	}
 }
