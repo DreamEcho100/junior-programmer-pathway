@@ -133,8 +133,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2235477}
   - component: {fileID: 2235476}
+  - component: {fileID: 2235478}
   m_Layer: 0
-  m_Name: SpawnManager
+  m_Name: Spawn Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,8 +153,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49152c37ccd4ab4ab0646f951ab4d6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2223647753376079158, guid: 542d23f05b3b68047b5a9c7cbdc175b5, type: 3}
-  powerUpPrefab: {fileID: 3016358106553117023, guid: 8bbbca1108f1c814fb66a64608886c9c, type: 3}
+  enemiesPrefabs:
+  - {fileID: 2223647753376079158, guid: 1400b544642113b4f9ac0de84dcdce63, type: 3}
+  - {fileID: 2223647753376079158, guid: 9ffc85fcbe34cc6468e7f5982e14cafe, type: 3}
+  - {fileID: 2223647753376079158, guid: 542d23f05b3b68047b5a9c7cbdc175b5, type: 3}
+  powerUpsPrefabs:
+  - {fileID: 8342952520113013595, guid: 73cea42ee1dc91342a7426c7cceb8e1f, type: 3}
+  - {fileID: 3016358106553117023, guid: 8bbbca1108f1c814fb66a64608886c9c, type: 3}
+  - {fileID: 3016358106553117023, guid: c5d55c48009c18640a61e3154634049e, type: 3}
+  bossEnemyPrefabs: {fileID: 2223647753376079158, guid: eab0346260820d14bb61d3a72792e6ef, type: 3}
   spawnPosRangeX: 9
   spawnPosRangeZ: 9
   randomPosRangeX: 0
@@ -173,6 +181,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2235478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2235475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7844e639b462ab24e8bd084ff5c6d8d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isOn: 0
 --- !u!1 &162929279 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1742899641471652, guid: 923deea38dc6a8843b15db7638919c1e, type: 3}
@@ -313,7 +334,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 711389348}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: be5249e015989a6479964998c81713ad, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -396,8 +417,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da99c4379b574c469ee785ac35b0670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentPowerUp: 
   powerUpIndicator: {fileID: 162929279}
-  speed: 5
+  bullet: {fileID: 4381395120541952891, guid: 02b2b672b51629948be0497225e651b3, type: 3}
+  speed: 7
   powerUpStrength: 15
   hasPowerUp: 0
 --- !u!1001 &1106545127
@@ -662,7 +685,7 @@ GameObject:
   - component: {fileID: 1220134679}
   - component: {fileID: 1220134678}
   m_Layer: 0
-  m_Name: FocalPoint
+  m_Name: Focal Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -708,7 +731,7 @@ GameObject:
   - component: {fileID: 1384850937}
   - component: {fileID: 1384850936}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -751,6 +774,10 @@ PrefabInstance:
     - target: {fileID: 1301643505922104, guid: 961be46ca9a355943ae3f65c47741bb0, type: 3}
       propertyPath: m_Name
       value: Island
+      objectReference: {fileID: 0}
+    - target: {fileID: 1301643505922104, guid: 961be46ca9a355943ae3f65c47741bb0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 4625923886776944, guid: 961be46ca9a355943ae3f65c47741bb0, type: 3}
       propertyPath: m_RootOrder

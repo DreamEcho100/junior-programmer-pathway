@@ -5,13 +5,24 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	private static int
+	_currentLevel = 1,
 		_powerUpsSpawned = 0,
-		_powerUpsToSpawnCounter = 1;
-	private static int
+		_powerUpsToSpawnCounter = 1,
 		_enemiesSpawned = 0,
 		_enemiesToSpawnCounter = 1;
+	private static int _bulletsSpawned = 0;
 
 	public static GameManager instance;
+	public int currentLevel
+	{
+		get { return _currentLevel; }
+		set { if (value > 0) _currentLevel = value; }
+	}
+	public int bulletsSpawned
+	{
+		get { return _bulletsSpawned; }
+		set { if (value >= 0) _bulletsSpawned = value; }
+	}
 	public int enemiesToSpawnCounter
 	{
 		get { return _enemiesToSpawnCounter; }
@@ -45,21 +56,5 @@ public class GameManager : MonoBehaviour
 		{
 			Destroy(gameObject);
 		}
-	}
-
-	public bool SpawnCountMonitor()
-	{
-		if (enemiesSpawnedCounter <= 0)
-		{
-			enemiesToSpawnCounter++;
-			// enemiesSpawnedCounter = enemiesToSpawnCounter;
-
-			powerUpsToSpawnCounter = (int)Mathf.Ceil(enemiesToSpawnCounter / 2);
-			// powerUpsSpawnedCounter = powerUpsToSpawnCounter;
-
-			return true;
-		}
-
-		return false;
 	}
 }

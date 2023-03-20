@@ -8,11 +8,21 @@ public class SpawnManager : MonoBehaviour
 	private const string POWER_UP_TAG = "PowerUp";
 
 	private GameObject player;
+	private BossEnemyController bossEnemyController;
+	private bool _isBossOn;
+
+	public bool IsBossOn
+	{
+		get { return _isBossOn; }
+		set { _isBossOn = value; }
+	}
 
 	[SerializeField]
-	private GameObject
-		enemyPrefab,
-		powerUpPrefab;
+	private GameObject[]
+		enemiesPrefabs,
+		powerUpsPrefabs;
+	[SerializeField]
+	private GameObject bossEnemyPrefabs;
 
 	[SerializeField]
 	private float
@@ -25,45 +35,75 @@ public class SpawnManager : MonoBehaviour
 	void Start()
 	{
 		player = GameObject.Find("Player");
-		SpawnEnemyWave();
-		ReSpawnPowerUpsWave();
+		// bossEnemyController = bossEnemyPrefabs.GetComponent<BossEnemyController>();
+		SpawnEnemyWave(GameManager.instance.enemiesToSpawnCounter);
+		ReSpawnPowerUpsWave(GameManager.instance.powerUpsToSpawnCounter);
 	}
 
 	void Update()
 	{
-		if (GameManager.instance.SpawnCountMonitor())
+		if (GameManager.instance.enemiesSpawnedCounter <= 0)
 		{
-			SpawnEnemyWave();
-			ReSpawnPowerUpsWave();
+			IsBossOn = false;
+			GameManager.instance.enemiesToSpawnCounter++;
+			GameManager.instance.powerUpsToSpawnCounter = (int)Mathf.Ceil(GameManager.instance.enemiesToSpawnCounter / 2);
+			SpawnEnemyWave(GameManager.instance.enemiesToSpawnCounter);
+			ReSpawnPowerUpsWave(GameManager.instance.powerUpsToSpawnCounter);
+			GameManager.instance.currentLevel++;
 		}
 	}
 
-	void SpawnEnemyWave()
+	void FixedUpdate()
+	{
+		if (!IsBossOn && GameManager.instance.currentLevel % 3 == 0)
+		{
+			GameManager.instance.enemiesToSpawnCounter++;
+			bossEnemyController =
+				Instantiate(bossEnemyPrefabs, GenerateSpawnPosition(), bossEnemyPrefabs.transform.rotation)
+				.GetComponent<BossEnemyController>(); ;
+			bossEnemyController.isOn = true;
+			IsBossOn = bossEnemyController.isOn;
+			bossEnemyController.spawnTime = bossEnemyController.spawnTimeBase + ((GameManager.instance.currentLevel % 3) * 0.25f);
+		}
+	}
+
+	public void SpawnEnemyWave(int spawnCounter)
 	{
 		if (!player) return;
+		int randomEnemyPrefabIndex;
 
-		for (int i = 0; i < GameManager.instance.enemiesToSpawnCounter; i++)
+		for (int i = 0; i < spawnCounter; i++)
 		{
-			Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+			randomEnemyPrefabIndex = Random.Range(0, enemiesPrefabs.Length);
+			Instantiate(enemiesPrefabs[randomEnemyPrefabIndex], GenerateSpawnPosition(), enemiesPrefabs[randomEnemyPrefabIndex].transform.rotation);
 			GameManager.instance.enemiesSpawnedCounter++;
 		}
 	}
-	void ReSpawnPowerUpsWave()
+	public void SpawnPowerUpsWave(int spawnCounter)
 	{
 		if (!player) return;
+		int randomPowerUpsPrefabIndex;
 
-		GameObject[] powerUps = GameObject.FindGameObjectsWithTag(POWER_UP_TAG);
-		foreach (GameObject powerUp in powerUps)
+		for (int i = 0; i < spawnCounter; i++)
 		{
-			Destroy(powerUp);
-		}
-
-		PowerUpIndicatorController[] spawnPowerUps = FindObjectsOfType<PowerUpIndicatorController>();
-		for (int i = 0; i < GameManager.instance.powerUpsToSpawnCounter; i++)
-		{
-			Instantiate(powerUpPrefab, GenerateSpawnPosition(), powerUpPrefab.transform.rotation);
+			randomPowerUpsPrefabIndex = Random.Range(0, powerUpsPrefabs.Length);
+			Instantiate(
+				powerUpsPrefabs[randomPowerUpsPrefabIndex],
+				GenerateSpawnPosition(),
+				powerUpsPrefabs[randomPowerUpsPrefabIndex].transform.rotation
+			);
 			GameManager.instance.powerUpsSpawnedCounter++;
 		}
+	}
+	public void ReSpawnPowerUpsWave(int spawnCounter)
+	{
+		// if (!player) return;
+		GameObject[] powerUps = GameObject.FindGameObjectsWithTag(POWER_UP_TAG);
+		foreach (GameObject powerUp in powerUps)
+			Destroy(powerUp);
+
+		SpawnPowerUpsWave(spawnCounter);
+
 	}
 
 	private Vector3 GenerateSpawnPosition()
